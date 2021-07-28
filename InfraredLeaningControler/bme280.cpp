@@ -7,6 +7,7 @@
 */
 
 #include "bme280_header.h"
+#include <Arduino.h>
 #include <Wire.h>
   
 void BmeInit()
@@ -22,9 +23,6 @@ void BmeInit()
     uint8_t ctrl_meas_reg = (osrs_t << 5) | (osrs_p << 2) | mode;
     uint8_t config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en;
     uint8_t ctrl_hum_reg  = osrs_h;
-    
-    Serial.begin(9600);
-    Wire.begin(21,22);
     
     writeReg(0xF2,ctrl_hum_reg);
     writeReg(0xF4,ctrl_meas_reg);
