@@ -39,12 +39,12 @@ char *ParseResponse(){
         }
     }
 
-    char response[client.available()];
+    char body[client.available()];
     while(client.available()){
-        strcat(response, client.read());
+        strcat(body, client.read());
     }
 
-    return response;
+    return body;
 }
 
 
