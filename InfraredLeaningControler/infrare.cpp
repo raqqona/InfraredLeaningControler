@@ -6,20 +6,17 @@
 #include <IRutils.h>
 #include <IRsend.h>
 
-void InfrareSendInit()
-{
+void InfrareSendInit(){
     IRsend irsend(IR_Send_pin);
     irsend.begin();
 }
 
-void InfrareSend()
-{
+void InfrareSend(){
     command = MakeCommand();
-    irsend.send(maker_code, samsungState, IR_bits);
+    irsend.send(maker_code, command, IR_bits);
 }
 
-unsigned char MakeCommand()
-{
+unsigned char MakeCommand() {
     unsigned char command[500];
     //next task
 }

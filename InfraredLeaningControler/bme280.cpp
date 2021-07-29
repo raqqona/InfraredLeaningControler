@@ -10,8 +10,7 @@
 #include <Arduino.h>
 #include <Wire.h>
   
-void BmeInit()
-{
+void BmeInit(){
     uint8_t osrs_t = 1;             //Temperature oversampling x 1
     uint8_t osrs_p = 1;             //Pressure oversampling x 1
     uint8_t osrs_h = 1;             //Humidity oversampling x 1
@@ -30,22 +29,21 @@ void BmeInit()
     readTrim();
 }
 
-void GetTemp(double* temp)
-{
+void GetTemp(double* temp){
     signed long int temp_cal;
     
     temp_cal = calibration_T(temp_raw);
     temp = (double)temp_cal / 100.0;
 }
-void GetHum(double* hum)
-{
+
+void GetHum(double* hum){
     unsigned long int hum_cal;
     
     hum_cal = calibration_H(hum_raw);
     hum = (double)hum_cal / 1024.0;
 }
-void GetPress(double* press)
-{
+
+void GetPress(double* press){
     double press_act = 0.0;
     unsigned long int press_cal;
 
@@ -53,8 +51,8 @@ void GetPress(double* press)
     press_cal = calibration_P(pres_raw);
     press = (double)press_cal / 100.0;
 }
-void ReadTrim()
-{
+
+void ReadTrim(){
     uint8_t data[32],i=0;
     Wire.beginTransmission(BME280_ADDRESS);
     Wire.write(0x88);
@@ -99,8 +97,8 @@ void ReadTrim()
     dig_H5 = (data[30] << 4) | ((data[29] >> 4) & 0x0F);
     dig_H6 = data[31];   
 }
-void WriteReg(uint8_t reg_address, uint8_t data)
-{
+
+void WriteReg(uint8_t reg_address, uint8_t data){
     Wire.beginTransmission(BME280_ADDRESS);
     Wire.write(reg_address);
     Wire.write(data);
@@ -108,8 +106,7 @@ void WriteReg(uint8_t reg_address, uint8_t data)
 }
 
 
-void ReadBmeData()
-{
+void ReadBmeData(){
     int i = 0;
     uint32_t data[8];
     Wire.beginTransmission(BME280_ADDRESS);
@@ -126,8 +123,7 @@ void ReadBmeData()
 }
 
 
-signed long int Calibration_T(signed long int adc_T)
-{
+signed long int Calibration_T(signed long int adc_T){
     
     signed long int var1, var2, T;
     var1 = ((((adc_T >> 3) - ((signed long int)dig_T1<<1))) * ((signed long int)dig_T2)) >> 11;
@@ -138,8 +134,7 @@ signed long int Calibration_T(signed long int adc_T)
     return T; 
 }
 
-unsigned long int Calibration_P(signed long int adc_P)
-{
+unsigned long int Calibration_P(signed long int adc_P){
     signed long int var1, var2;
     unsigned long int P;
     var1 = (((signed long int)t_fine)>>1) - (signed long int)64000;
@@ -167,8 +162,7 @@ unsigned long int Calibration_P(signed long int adc_P)
     return P;
 }
 
-unsigned long int Calibration_H(signed long int adc_H)
-{
+unsigned long int Calibration_H(signed long int adc_H)  {
     signed long int v_x1;
     
     v_x1 = (t_fine - ((signed long int)76800));

@@ -1,9 +1,12 @@
 #include "bme280_header.h"
+#include "infrare_header.h" 
+#include "wifi_header.h"
 
 void setup() {
   Serial.begin(9600);
   Wire.begin(21,22);
-  Bme280Init()
+  WifiConnect();
+  Bme280Init();
 }
 
 void loop() {
