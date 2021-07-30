@@ -6,6 +6,7 @@
 * esp32 DevKit-C
 * bme280
 * 5mm赤外線LED 940nm OSI5LA5113A
+* OSRB38C9AA
 
 ### bme280 setup(i2c)
 下の表の通りにピンを接続。
@@ -17,3 +18,8 @@
 |  +  |  - |
 |  -  |  - |
 | 3V3 | 16 |
+
+### OSRB38C9AA
+| OUT | GND | VCC |
+| --- | --- | --- |
+| 17  | GND | 5V  |
