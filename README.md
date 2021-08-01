@@ -23,3 +23,6 @@
 | OUT | GND | VCC |
 | --- | --- | --- |
 | 17  | GND | 5V  |
+
+### リモコンの送信データ
+0xmaker code/P/M/T/S/F000000XX
