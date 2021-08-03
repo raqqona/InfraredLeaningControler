@@ -4,7 +4,7 @@
 #include <WifiClientSecure.h>
 WifiClientSecure client;
 
-void WifiConnect(){   
+void WifiConnect() {   
     Wifi.begin(ssid, passwd);
     while (Wifi.status() != WL_CONNECTED){
         Serial.print(".");
@@ -15,7 +15,7 @@ void WifiConnect(){
     Serial.println(WiFi.localIP());
 }
 
-void MakeRequestHeader(char *header, char *method){
+void MakeRequestHeader(char *header, char *method) {
     strcat(header, method);
     strcat(header, " ");
     strcat(header, url);
@@ -30,8 +30,27 @@ void MakeRequestHeader(char *header, char *method){
     strcat(header, "\r\n");
 }
 
-char *ParseResponse(){
-    while(client.connected()){
+void MakeRequestBody(char *body, double temp, double hum, double press) {
+    char *buf;
+    buf = (char *)malloc(8);
+    if (buf == NULL) {
+        break;
+    }
+    strcat(body, "{'temp':");
+    snprintf(buf, 8, "%f", temp);
+    strcat(body, buf);
+    strcat(body, ",'hum':");
+    snprintf(buf, 8, "%f", hum);
+    strcat(body, buf);
+    strcat(body, ",'press':");
+    snprintf(buf, 8, "%f", press);
+    strcat(body, buf);
+    strcat(body, "}");
+    free(buf);
+}
+
+char *ParseResponse() {
+    while(client.connected()) {
         while (client.available()) {
             if(client.read() == "\r"){
                 break;
@@ -48,18 +67,33 @@ char *ParseResponse(){
 }
 
 
-char *SendRequest(char *method, char *body){
-  if (!client.connect(server, 443)){
+char *SendRequest(char *method, double temp, double hum, double press) {
+  if (!client.connect(server, 443)) {
     Serial.println("Connection Failed!");
   }else{
     Serial.println("Connected to sucsess!");
     char *header;
+    header = (char *)malloc(256);
+    if (header == NULL) {
+        break;
+    }
     MakeRequestHeader(header, method);
+
+    char *body;
+    body = (char *)malloc(64);
+    if (body == NULL) {
+        break;
+    }
+    MakeRequestHeader(body, temp, hum, press);
 
     client.print(head);
     client.print(body);
 
-    char* response_body = ParseResponse();
+    free(header);
+    free(body);
+
+    char response_body[128];
+    response_body = ParseResponse();
 
     delay(2);
     client.stop();

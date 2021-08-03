@@ -16,4 +16,7 @@ void loop() {
   temp = GetTemp();
   hum = GetHum();
   press = GetPress();
+  
+  char received_command[128];
+  received_command = SendRequest("GEt", temp, hum, press);
 }

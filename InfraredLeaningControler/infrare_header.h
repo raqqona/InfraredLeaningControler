@@ -2,6 +2,7 @@
 #define INCLUDE_INFRARE
 
 extern uint16_t IR_send_pin = 17;
+extern char MAKER_CODE[13] = "MITSUBISHI112";
 extern uint16_t IR_bits = 112;
 extern uint16_t COMMAND_HEADER = 0x23CB2601002;
 
