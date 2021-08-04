@@ -15,37 +15,44 @@ void WifiConnect() {
     Serial.println(WiFi.localIP());
 }
 
-void MakeRequestHeader(char *header, char *method) {
-    strcat(header, method);
-    strcat(header, " ");
-    strcat(header, url);
-    strcat(header, " HTTP/1.1\r\n");
-    strcat(header, "Host: ");
-    strcat(header, server);
-    strcat(header, "\r\n");
-    strcat(header, "Connection: keep-alive\r\n");
-    strcat(header, "Content-Length: ");
-    strcat(header, length);
-    strcat(header, "\r\n");
-    strcat(header, "\r\n");
-}
-
-void MakeRequestBody(char *body, double temp, double hum, double press) {
+void MakeRequestHeader(HTTP_REQUEST *request, char *method) {
     char *buf;
     buf = (char *)malloc(8);
     if (buf == NULL) {
         break;
     }
-    strcat(body, "{'temp':");
+    strcat(requst->header, method);
+    strcat(requst->header, " ");
+    strcat(requst->header, url);
+    strcat(requst->header, " HTTP/1.1\r\n");
+    strcat(requst->header, "Host: ");
+    strcat(requst->header, server);
+    strcat(requst->header, "\r\n");
+    strcat(requst->header, "Connection: keep-alive\r\n");
+    strcat(requst->header, "Content-Length: ");
+    snprintf(buf, 8, "%d", sizeof(request.body));
+    strcat(requst->header, buf);
+    strcat(requst->header, "\r\n");
+    strcat(requst->header, "\r\n");
+    free(buf);
+}
+
+void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, double temp, double hum, double press) {
+    char *buf;
+    buf = (char *)malloc(8);
+    if (buf == NULL) {
+        break;
+    }
+    strcat(request->body, "{'temp':");
     snprintf(buf, 8, "%f", temp);
-    strcat(body, buf);
-    strcat(body, ",'hum':");
+    strcat(request->body, buf);
+    strcat(request->body, ",'hum':");
     snprintf(buf, 8, "%f", hum);
-    strcat(body, buf);
-    strcat(body, ",'press':");
+    strcat(request->body, buf);
+    strcat(request->body, ",'press':");
     snprintf(buf, 8, "%f", press);
-    strcat(body, buf);
-    strcat(body, "}");
+    strcat(request->body, buf);
+    strcat(request->body, "}");
     free(buf);
 }
 
@@ -72,25 +79,20 @@ char *SendRequest(char *method, double temp, double hum, double press) {
     Serial.println("Connection Failed!");
   }else{
     Serial.println("Connected to sucsess!");
-    char *header;
-    header = (char *)malloc(256);
-    if (header == NULL) {
+
+    HTTP_REQUEST *reqeuest;
+    request = (HTTP_REQUEST *)malloc(sizeof(HTTP_REQUEST));
+    if (request == NULL) {
         break;
     }
-    MakeRequestHeader(header, method);
 
-    char *body;
-    body = (char *)malloc(64);
-    if (body == NULL) {
-        break;
-    }
-    MakeRequestHeader(body, temp, hum, press);
+    MakeRequestHeader(request, method);
+    MakeRequestHeader(request, temp, hum, press);
 
-    client.print(head);
-    client.print(body);
+    client.print(request->head);
+    client.print(request->body);
 
-    free(header);
-    free(body);
+    free(request);
 
     char response_body[128];
     response_body = ParseResponse();
@@ -99,6 +101,6 @@ char *SendRequest(char *method, double temp, double hum, double press) {
     client.stop();
     delay(2);
 
-    return response_body;
+    return response_request->body;
   }
 }

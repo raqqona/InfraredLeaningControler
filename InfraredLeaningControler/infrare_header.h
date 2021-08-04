@@ -1,9 +1,9 @@
 #ifndef INCLUDE_INFRARE
 #define INCLUDE_INFRARE
 
-extern uint16_t IR_send_pin = 17;
+extern uint16_t IR_PIN = 17;
 extern char MAKER_CODE[13] = "MITSUBISHI112";
-extern uint16_t IR_bits = 112;
+extern uint16_t IR_BITS = 112;
 extern uint16_t COMMAND_HEADER = 0x23CB2601002;
 
 extern uint8_t POWER_ON = 0x4
@@ -24,10 +24,19 @@ extern uint8_t SWING_LOWEST = 0x3
 extern uint8_t SWING_AUTO = 0x0
 extern uint8_t PARITY = 0x30
 
+typedef struct command_option {
+    char power[3];
+    char mode[4];
+    int temp;
+    char fan[6];
+    char swing[7];
+}COMMAND_OPTION;
+
 
 
 void InfrareSendInit();
-void InfrareSend();
-unsigned char *MakeCommand(char *power, char *mode, char *temp, char *fan, char *swing);
+void InfrareSend(char *received_body);
+void ParseResponseBody(char *response_body, COMMAND_OPTION *option);
+unsigned char *MakeCommand(char *command, COMMAND_OPTION *option);
 
 #endif
