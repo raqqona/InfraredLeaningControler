@@ -15,9 +15,9 @@
 | 3V3 | GND | 3V3 | 21  | GND | 22  |
 
 ### 5mm赤外線LED 940nm OSI5LA5113A
-|  +  |  - |
-|  -  |  - |
-| 3V3 | 16 |
+| + | - |
+| - | - |
+| X | Y |
 
 ### OSRB38C9AA
 | OUT | GND | VCC |
