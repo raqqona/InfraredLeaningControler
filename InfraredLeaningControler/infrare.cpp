@@ -12,24 +12,13 @@ void InfrareSendInit(){
 }
 
 void InfrareSend(char *response_body){
-    unsigned char *command;
+    unsigned char command[28];
     command = (unsigned char *)malloc(28);
-    if (command == NULL) {
-        break;
-    }
-
-    COMMAND_OPTION *option;
-    option = (COMMAND_OPTION *)malloc(sizeof(COMMAND_OPTION));
-    if (option == NULL) {
-        break;
-    }
+    COMMAND_OPTION option;
 
     ParseResponseBody(response_body, option);
     MakeCommand(command, option);
     irsend.send(MAKER_CODE, command, IR_BITS);
-    
-    free(commnad);
-    free(option);
 }
 
 void ParseResponseBody(char *response_body, COMMAND_OPTION *option) {

@@ -16,11 +16,8 @@ void WifiConnect() {
 }
 
 void MakeRequestHeader(HTTP_REQUEST *request, char *method) {
-    char *buf;
-    buf = (char *)malloc(8);
-    if (buf == NULL) {
-        break;
-    }
+    char buf[8];
+
     strcat(requst->header, method);
     strcat(requst->header, " ");
     strcat(requst->header, url);
@@ -34,15 +31,11 @@ void MakeRequestHeader(HTTP_REQUEST *request, char *method) {
     strcat(requst->header, buf);
     strcat(requst->header, "\r\n");
     strcat(requst->header, "\r\n");
-    free(buf);
 }
 
 void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, double temp, double hum, double press) {
-    char *buf;
-    buf = (char *)malloc(8);
-    if (buf == NULL) {
-        break;
-    }
+    char buf[8];
+
     strcat(request->body, "{'temp':");
     snprintf(buf, 8, "%f", temp);
     strcat(request->body, buf);
@@ -53,7 +46,6 @@ void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, double temp, double hum
     snprintf(buf, 8, "%f", press);
     strcat(request->body, buf);
     strcat(request->body, "}");
-    free(buf);
 }
 
 char *ParseResponse() {
@@ -80,11 +72,7 @@ char *SendRequest(char *method, double temp, double hum, double press) {
   }else{
     Serial.println("Connected to sucsess!");
 
-    HTTP_REQUEST *reqeuest;
-    request = (HTTP_REQUEST *)malloc(sizeof(HTTP_REQUEST));
-    if (request == NULL) {
-        break;
-    }
+    HTTP_REQUEST reqeuest;
 
     MakeRequestHeader(request, method);
     MakeRequestHeader(request, temp, hum, press);
@@ -92,7 +80,6 @@ char *SendRequest(char *method, double temp, double hum, double press) {
     client.print(request->head);
     client.print(request->body);
 
-    free(request);
 
     char response_body[128];
     response_body = ParseResponse();
