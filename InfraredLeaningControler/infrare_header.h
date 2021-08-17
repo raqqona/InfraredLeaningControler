@@ -30,6 +30,7 @@ typedef struct command_option {
     int temp;
     char fan[6];
     char swing[7];
+    bool command;
 }COMMAND_OPTION;
 
 

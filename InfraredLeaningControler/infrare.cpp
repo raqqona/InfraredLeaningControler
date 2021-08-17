@@ -5,6 +5,7 @@
 #include <IRtext.h>
 #include <IRutils.h>
 #include <IRsend.h>
+#include <ArduinoJson.h>
 
 void InfrareSendInit(){
     IRsend irsend(IR_PIN);
@@ -22,12 +23,18 @@ void InfrareSend(char *response_body){
 }
 
 void ParseResponseBody(char *response_body, COMMAND_OPTION *option) {
-    //APIの仕様決めてから
-    option->power = response_body;
-    option->mode = response_body;
-    option->temp = response_body;
-    option->fan = response_body;
-    option->swing = response_body;
+    StaticJsonDocument<128> res_json; 
+    DeserializationError error = deserializaJson(res_json, response_body, sizeof(response_json));
+    if (error) {
+        return "failed";
+    }
+
+    option->power = res_json['power'];
+    option->mode = res_json['mode'];
+    option->temp = res_json['temp'];
+    option->fan = res_json['fan'];
+    option->swing = res_json['swing'];
+    option->command = res_json['command']
 }
 
 void MakeCommand(char *command, COMMAND_OPTION *option) {
