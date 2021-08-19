@@ -20,4 +20,5 @@ void loop() {
   
   response_body = SendRequest("GET", temp, hum, press);
   InfrareSend(response_body);
+  time.sleep(5);
 }

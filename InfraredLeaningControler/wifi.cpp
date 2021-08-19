@@ -33,7 +33,7 @@ void MakeRequestHeader(HTTP_REQUEST *request, char *method) {
     strcat(requst->header, "\r\n");
 }
 
-void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, double temp, double hum, double press) {
+void MakeRequest->bodyBody(HTTP_REQUEST *request, double temp, double hum, double press) {
     char buf[8];
 
     strcat(request->body, "{'temp':");
