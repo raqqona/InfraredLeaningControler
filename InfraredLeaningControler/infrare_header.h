@@ -33,6 +33,12 @@ typedef struct command_option {
     bool command;
 }COMMAND_OPTION;
 
+typedef struct indoor_env {
+    double temp;
+    double hum;
+    double press;
+    bool command;
+}INDOOR_ENV;
 
 
 void InfrareSendInit();
