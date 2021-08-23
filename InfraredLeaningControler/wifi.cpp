@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <Wifi.h>
 #include <WifiClientSecure.h>
+#include <ArduinoJson.h>
 WifiClientSecure client;
 
 void WifiConnect() {   
@@ -33,7 +34,7 @@ void MakeRequestHeader(HTTP_REQUEST *request, char *method) {
     strcat(requst->header, "\r\n");
 }
 
-void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, double temp, double hum, double press) {
+void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, INDOOR_ENV idoorEnv) {
     char buf[8];
 
     strcat(request->body, "{'temp':");
@@ -48,7 +49,22 @@ void MakeRequestrequest->bodyBody(HTTP_REQUEST *request, double temp, double hum
     strcat(request->body, "}");
 }
 
-char *ParseResponse() {
+void ParseResponseBody(char *response_body, COMMAND_OPTION *option) {
+    StaticJsonDocument<128> res_json; 
+    DeserializationError error = deserializaJson(res_json, response_body, sizeof(response_json));
+    if (error) {
+        return "failed";
+    }
+
+    option->power = res_json['power'];
+    option->mode = res_json['mode'];
+    option->temp = res_json['temp'];
+    option->fan = res_json['fan'];
+    option->swing = res_json['swing'];
+    option->command = res_json['command']
+}
+
+void ParseResponse(COMMAND_OPTION *cmd_option) {
     while(client.connected()) {
         while (client.available()) {
             if(client.read() == "\r"){
@@ -62,11 +78,14 @@ char *ParseResponse() {
         strcat(body, client.read());
     }
 
-    return body;
+    ParseResponseBody(body, cmd_option);
+    if (cmd_option.command == false){
+        return;
+    }
 }
 
 
-char *SendRequest(char *method, double temp, double hum, double press) {
+COMMAND_OPTION *SendRequest(char *method, INDOOR_ENV idoorEnv) {
   if (!client.connect(server, 443)) {
     Serial.println("Connection Failed!");
   }else{
@@ -75,19 +94,18 @@ char *SendRequest(char *method, double temp, double hum, double press) {
     HTTP_REQUEST reqeuest;
 
     MakeRequestHeader(request, method);
-    MakeRequestHeader(request, temp, hum, press);
+    MakeRequestHeader(request, indoorEnv);
 
     client.print(request->head);
     client.print(request->body);
 
-
-    char response_body[128];
-    response_body = ParseResponse();
+    COMMAND_OPTION cmd_option;
+    ParseResponse(cmd_option);
 
     delay(2);
     client.stop();
     delay(2);
 
-    return response_request->body;
+    return cmd_option;
   }
 }

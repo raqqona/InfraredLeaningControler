@@ -12,8 +12,9 @@ typedef struct http_request {
 
 void WifiConnect();
 void MakeRequestHeader(char *header, char *method);
-void MakeRequestBody(char *body, double temp, double hum, double press);
-char *ParseResponse();
-char *SendRequest(char *method, char *body);
+void MakeRequestBody(char *body, INDOOR_ENV indoorEnv);
+void ParseResponseBody(char *response_body, COMMAND_OPTION *option);
+void ParseResponse(COMMAD_OPTION *cmd_option);
+COMMAND_OPTION *SendRequest(char *method, INDDOR_ENV indoorEnv);
 
 #endif

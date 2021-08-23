@@ -2,8 +2,8 @@
 #include "infrare_header.h" 
 #include "wifi_header.h"
 
-char received_body[128];
-double temp, hum, press = 0.0;
+COMMAND_OPTION cmd_option;
+INDOOR_ENV indoorEnv;
 
 void setup() {
   Serial.begin(9600);
@@ -14,10 +14,10 @@ void setup() {
 
 void loop() {
   ReadBmeData();
-  temp = GetTemp();
-  hum = GetHum();
-  press = GetPress();
+  indoorEnv.temp = GetTemp();
+  indoorEnv.hum = GetHum();
+  indoorEnv.press = GetPress();
   
-  response_body = SendRequest("GET", temp, hum, press);
-  InfrareSend(response_body);
+  cmd_option = SendRequest("GET", indoorEnv);
+  InfrareSend(cmd_option);
 }

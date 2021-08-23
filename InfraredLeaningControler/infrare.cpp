@@ -5,36 +5,17 @@
 #include <IRtext.h>
 #include <IRutils.h>
 #include <IRsend.h>
-#include <ArduinoJson.h>
 
 void InfrareSendInit(){
     IRsend irsend(IR_PIN);
     irsend.begin();
 }
 
-void InfrareSend(char *response_body){
-    unsigned char command[28];
-    command = (unsigned char *)malloc(28);
-    COMMAND_OPTION option;
+void InfrareSend(COMMAND_OPTION *option){
+    char command[28];
 
-    ParseResponseBody(response_body, option);
     MakeCommand(command, option);
     irsend.send(MAKER_CODE, command, IR_BITS);
-}
-
-void ParseResponseBody(char *response_body, COMMAND_OPTION *option) {
-    StaticJsonDocument<128> res_json; 
-    DeserializationError error = deserializaJson(res_json, response_body, sizeof(response_json));
-    if (error) {
-        return "failed";
-    }
-
-    option->power = res_json['power'];
-    option->mode = res_json['mode'];
-    option->temp = res_json['temp'];
-    option->fan = res_json['fan'];
-    option->swing = res_json['swing'];
-    option->command = res_json['command']
 }
 
 void MakeCommand(char *command, COMMAND_OPTION *option) {

@@ -1,4 +1,4 @@
-#ifndef INCLUDE_INFRARE
+co#ifndef INCLUDE_INFRARE
 #define INCLUDE_INFRARE
 
 extern uint16_t IR_PIN = 17;
@@ -42,8 +42,7 @@ typedef struct indoor_env {
 
 
 void InfrareSendInit();
-void InfrareSend(char *received_body);
-void ParseResponseBody(char *response_body, COMMAND_OPTION *option);
-unsigned char *MakeCommand(char *command, COMMAND_OPTION *option);
+void InfrareSend(COMMAND_OPTION *option);
+void MakeCommand(char *command, COMMAND_OPTION *option);
 
 #endif
