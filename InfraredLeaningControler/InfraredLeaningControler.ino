@@ -20,4 +20,6 @@ void loop() {
   
   cmd_option = SendRequest("GET", indoorEnv);
   InfrareSend(cmd_option);
+
+  delay(30)
 }
